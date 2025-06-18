@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知华斋 - 国际中文教学平台</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'gugong-red': '#9E1F36',
+            'liuli-gold': '#D4AF37',
+            'citywall-gray': '#5D4037',
+            'ricepaper-white': '#F8F5F0',
+          },
+          fontFamily: {
+            brush: ['"Ma Shan Zheng"', 'cursive'],
+            kai: ['"KaiTi"', '"STKaiti"', 'serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .seal-btn {
+        position: relative;
+        border-radius: 50%;
+        transform-style: preserve-3d;
+        transition: all 0.3s ease;
+      }
+      .seal-btn::before {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 2px dashed #D4AF37;
+        animation: rotate 20s linear infinite;
+        opacity: 0.7;
+      }
+      .seal-btn:active {
+        transform: translateY(4px) scale(0.96);
+      }
+      .scroll-decoration {
+        position: relative;
+      }
+      .scroll-decoration::before,
+      .scroll-decoration::after {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 20px;
+        top: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 Q10,15 20,0 Q10,15 0,0 Q10,15 20,0 Q10,15 0,0 Q10,15 20,0 Q10,15 0,0 Q10,15 20,0 Q10,15 0,0' stroke='%23D4AF37' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+        background-repeat: repeat-y;
+        opacity: 0.6;
+      }
+      .scroll-decoration::before {
+        left: -15px;
+      }
+      .scroll-decoration::after {
+        right: -15px;
+        transform: scaleX(-1);
+      }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes openDoor {
+      from { transform: translateX(0); }
+      to { transform: translateX(50%); }
+    }
+    
+    @keyframes goldShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+  
+  <!-- 字体引入 -->
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-ricepaper-white text-citywall-gray min-h-screen flex flex-col">
+  <!-- 顶部琉璃瓦檐 - 修改为全宽 -->
+  <div class="relative w-full">
+    <svg class="w-full h-16 md:h-20" viewBox="0 0 1000 80">
+      <path d="M0,40 L1000,40 L1000,80 L0,80 Z" fill="#9E1F36" />
+      <path d="M0,20 L100,0 L200,20 L300,0 L400,20 L500,0 L600,20 L700,0 L800,20 L900,0 L1000,20 L1000,30 L0,30 Z" fill="#D4AF37" />
+      <path d="M0,10 L100,30 L200,10 L300,30 L400,10 L500,30 L600,10 L700,30 L800,10 L900,30 L1000,10" stroke="#9E1F36" stroke-width="2" fill="none" />
+    </svg>
+    
+    <!-- 金色祥云边框 - 修改为全宽 -->
+    <div class="absolute top-0 left-0 w-full h-10 bg-gradient-to-r from-transparent via-liuli-gold/20 to-transparent opacity-70"></div>
+  </div>
+  
+  <!-- 导航栏 -->
+  <nav class="bg-gugong-red/95 text-liuli-gold shadow-lg relative z-30">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-book text-2xl"></i>
+        <span class="font-brush text-xl">知华斋</span>
+      </div>
+      
+      <!-- 桌面导航 -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#" class="font-brush text-lg hover:text-white transition-colors duration-300 relative">
+          首页
+          <div class="absolute -bottom-1 left-0 w-full h-0.5 bg-liuli-gold transform scale-x-0 transition-transform duration-300 origin-left hover:scale-x-100"></div>
+        </a>
+        <a href="#culture" class="font-brush text-lg hover:text-white transition-colors duration-300 relative">
+          文化资料
+          <div class="absolute -bottom-1 left-0 w-full h-0.5 bg-liuli-gold transform scale-x-0 transition-transform duration-300 origin-left hover:scale-x-100"></div>
+        </a>
+        <a href="#courses" class="font-brush text-lg hover:text-white transition-colors duration-300 relative">
+          微课讲解
+          <div class="absolute -bottom-1 left-0 w-full h-0.5 bg-liuli-gold transform scale-x-0 transition-transform duration-300 origin-left hover:scale-x-100"></div>
+        </a>
+        <a href="#quiz" class="font-brush text-lg hover:text-white transition-colors duration-300 relative">
+          常识闯关
+          <div class="absolute -bottom-1 left-0 w-full h-0.5 bg-liuli-gold transform scale-x-0 transition-transform duration-300 origin-left hover:scale-x-100"></div>
+        </a>
+        <a href="#" class="font-brush text-lg hover:text-white transition-colors duration-300 relative">
+          关于我们
+          <div class="absolute -bottom-1 left-0 w-full h-0.5 bg-liuli-gold transform scale-x-0 transition-transform duration-300 origin-left hover:scale-x-100"></div>
+        </a>
+      </div>
+      
+      <!-- 移动端菜单按钮 -->
+      <button class="md:hidden text-liuli-gold focus:outline-none" id="menuBtn">
+        <i class="fa fa-bars text-2xl"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div class="md:hidden h-0 overflow-hidden transition-all duration-300 bg-gugong-red/95" id="mobileMenu">
+      <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+        <a href="#" class="font-brush text-lg py-2 hover:text-white transition-colors duration-300">首页</a>
+        <a href="#culture" class="font-brush text-lg py-2 hover:text-white transition-colors duration-300">文化资料</a>
+        <a href="#courses" class="font-brush text-lg py-2 hover:text-white transition-colors duration-300">微课讲解</a>
+        <a href="#quiz" class="font-brush text-lg py-2 hover:text-white transition-colors duration-300">常识闯关</a>
+        <a href="#" class="font-brush text-lg py-2 hover:text-white transition-colors duration-300">关于我们</a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- 首屏：故宫宫门剪影 -->
+  <header class="relative h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+    <!-- 红墙背景 -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('https://picsum.photos/id/1015/1920/1080');"></div>
+    
+    <!-- 宫门剪影 -->
+    <div class="absolute inset-0 flex">
+      <div class="w-1/2 h-full bg-gugong-red/80 shadow-lg transform transition-all duration-1000 ease-in-out origin-right" id="leftDoor"></div>
+      <div class="w-1/2 h-full bg-gugong-red/80 shadow-lg transform transition-all duration-1000 ease-in-out origin-left" id="rightDoor"></div>
+    </div>
+    
+    <!-- 中央匾额 -->
+    <div class="relative z-10 text-center">
+      <h1 class="font-brush text-[clamp(2.5rem,8vw,5rem)] text-liuli-gold drop-shadow-lg animate-fadeIn" style="animation-delay: 0.5s;">知华斋</h1>
+      <p class="font-kai text-[clamp(1rem,3vw,1.5rem)] text-ricepaper-white mt-4 animate-fadeIn" style="animation-delay: 0.8s;">探索中华文化的窗口</p>
+      
+      <!-- 向下滚动按钮 -->
+      <a href="#main-content" class="inline-block mt-12 text-liuli-gold hover:text-white transition-colors duration-300 animate-bounce">
+        <i class="fa fa-angle-down text-3xl"></i>
+      </a>
+    </div>
+  </header>
+  
+  <!-- 分隔龙纹 -->
+  <div class="relative py-8">
+    <div class="absolute inset-0 flex items-center">
+      <div class="w-full h-px bg-liuli-gold/30"></div>
+    </div>
+    <div class="relative z-10 flex justify-center">
+      <svg width="100" height="30" viewBox="0 0 100 30" class="bg-ricepaper-white px-2">
+        <path d="M5,15 Q25,5 45,15 Q55,25 65,15 Q85,5 95,15" stroke="#D4AF37" fill="none" stroke-width="2" />
+        <circle cx="5" cy="15" r="3" fill="#D4AF37" />
+        <circle cx="95" cy="15" r="3" fill="#D4AF37" />
+      </svg>
+    </div>
+  </div>
+  
+  <!-- 主要内容区 -->
+  <main id="main-content" class="container mx-auto px-4 py-12">
+    <!-- 三个板块布局 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <!-- 板块一：文化资料 -->
+      <div id="culture" class="bg-ricepaper-white border-2 border-liuli-gold/60 rounded-lg shadow-xl p-6 scroll-decoration relative overflow-hidden">
+        <!-- 卷轴顶部装饰 -->
+        <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-liuli-gold/30 to-transparent"></div>
+        
+        <!-- 标题 -->
+        <h2 class="font-brush text-3xl md:text-4xl text-gugong-red mb-6 text-center relative">
+          知：文化资料
+          <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-liuli-gold rounded-full"></div>
+        </h2>
+        
+        <!-- 内容 -->
+        <div class="mt-8 space-y-6">
+          <div class="bg-ricepaper-white/70 p-4 border border-liuli-gold/30 rounded-lg hover:shadow-md transition-shadow duration-300">
+            <h3 class="font-brush text-xl text-citywall-gray mb-2">二十四节气</h3>
+            <button class="mt-3 seal-btn bg-gugong-red text-liuli-gold font-brush py-2 px-6 rounded-full hover:bg-gugong-red/80 transition-colors duration-300" onclick="openExternal('https://sunfish-yu.github.io/Yuss/index.html#')">
+              探索
+            </button>
+          </div>
+        </div>
+        
+        <!-- 卷轴底部装饰 -->
+        <div class="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-liuli-gold/30 to-transparent"></div>
+      </div>
+      
+      <!-- 板块二：微课讲解 -->
+      <div id="courses" class="bg-ricepaper-white border-2 border-liuli-gold/60 rounded-lg shadow-xl p-6 scroll-decoration relative overflow-hidden">
+        <!-- 卷轴顶部装饰 -->
+        <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-liuli-gold/30 to-transparent"></div>
+        
+        <!-- 标题 -->
+        <h2 class="font-brush text-3xl md:text-4xl text-gugong-red mb-6 text-center relative">
+          学：微课讲解
+          <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-liuli-gold rounded-full"></div>
+        </h2>
+        
+        <!-- 内容 -->
+        <div class="mt-8 space-y-6">
+          <div class="bg-ricepaper-white/70 p-4 border border-liuli-gold/30 rounded-lg hover:shadow-md transition-shadow duration-300">
+            <h3 class="font-brush text-xl text-citywall-gray mb-2">二十四节气</h3>
+            <button class="mt-3 seal-btn bg-gugong-red text-liuli-gold font-brush py-2 px-6 rounded-full hover:bg-gugong-red/80 transition-colors duration-300" onclick="openLocalVideo()">
+              学习
+            </button>
+          </div>
+        </div>
+        
+        <!-- 卷轴底部装饰 -->
+        <div class="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-liuli-gold/30 to-transparent"></div>
+      </div>
+      
+      <!-- 板块三：常识闯关 -->
+      <div id="quiz" class="bg-ricepaper-white border-2 border-liuli-gold/60 rounded-lg shadow-xl p-6 scroll-decoration relative overflow-hidden">
+        <!-- 卷轴顶部装饰 -->
+        <div class="absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-liuli-gold/30 to-transparent"></div>
+        
+        <!-- 标题 -->
+        <h2 class="font-brush text-3xl md:text-4xl text-gugong-red mb-6 text-center relative">
+          练：常识闯关
+          <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-liuli-gold rounded-full"></div>
+        </h2>
+        
+        <!-- 内容 -->
+        <div class="mt-8 space-y-6">
+          <div class="bg-ricepaper-white/70 p-4 border border-liuli-gold/30 rounded-lg hover:shadow-md transition-shadow duration-300">
+            <h3 class="font-brush text-xl text-citywall-gray mb-2">消消乐</h3>
+            <button class="mt-3 seal-btn bg-gugong-red text-liuli-gold font-brush py-2 px-6 rounded-full hover:bg-gugong-red/80 transition-colors duration-300" onclick="openExternal('https://c108116.github.io/xiaoxiaole-wlx/')">
+              闯关
+            </button>
+          </div>
+        </div>
+        
+        <!-- 卷轴底部装饰 -->
+        <div class="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-liuli-gold/30 to-transparent"></div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- 页脚 -->
+  <footer class="bg-gugong-red text-liuli-gold/80 py-8 relative overflow-hidden">
+    <!-- 底部祥云装饰 -->
+    <div class="absolute top-0 left-0 w-full h-12 bg-gradient-to-b from-transparent via-liuli-gold/10 to-transparent"></div>
+    
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center justify-center md:justify-start">
+            <i class="fa fa-book text-2xl mr-2"></i>
+            <span class="font-brush text-xl">知华斋</span>
+          </div>
+          <p class="font-kai mt-2 text-center md:text-left">探索中华文化的窗口</p>
+        </div>
+        
+        <div class="flex space-x-6 mb-6 md:mb-0">
+          <a href="#" class="hover:text-white transition-colors duration-300">
+            <i class="fa fa-weixin text-2xl"></i>
+          </a>
+          <a href="#" class="hover:text-white transition-colors duration-300">
+            <i class="fa fa-weibo text-2xl"></i>
+          </a>
+          <a href="#" class="hover:text-white transition-colors duration-300">
+            <i class="fa fa-youtube-play text-2xl"></i>
+          </a>
+          <a href="#" class="hover:text-white transition-colors duration-300">
+            <i class="fa fa-envelope text-2xl"></i>
+          </a>
+        </div>
+        
+        <div>
+          <p class="font-kai text-center">联系我们：contact@zhihuazhai.com</p>
+          <p class="font-kai text-center">© 2025 知华斋 版权所有</p>
+        </div>
+      </div>
+      
+      <!-- 水印 -->
+      <div class="absolute bottom-4 right-4 text-liuli-gold/30 font-brush text-2xl">
+        made by wlx
+      </div>
+    </div>
+  </footer>
+  
+  <!-- 节气模态框（保留原结构但移除内容，仅作为占位） -->
+  <div id="solarTermsModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('solarTermsModal')">&times;</span>
+      <div class="collection-detail">
+        <div class="detail-header">
+          <h2>二十四节气</h2>
+        </div>
+        <div class="detail-content">
+          <p>点击下方按钮访问完整节气内容</p>
+          <button class="mt-4 bg-gugong-red text-liuli-gold font-brush py-2 px-6 rounded-full hover:bg-gugong-red/80 transition-colors duration-300" onclick="openExternal('https://sunfish-yu.github.io/Yuss/index.html#')">
+            访问节气网站
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 消消乐模态框 -->
+  <div id="quizModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('quizModal')">&times;</span>
+      <div class="collection-detail">
+        <div class="detail-header">
+          <h2>汉字消消乐</h2>
+        </div>
+        <div class="detail-content">
+          <p>点击下方按钮开始汉字消消乐游戏</p>
+          <button class="mt-4 bg-gugong-red text-liuli-gold font-brush py-2 px-6 rounded-full hover:bg-gugong-red/80 transition-colors duration-300" onclick="openExternal('https://c108116.github.io/xiaoxiaole-wlx/')">
+            开始游戏
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 视频播放模态框 -->
+  <div id="videoModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('videoModal')">&times;</span>
+      <div class="collection-detail">
+        <div class="detail-header">
+          <h2>二十四节气 - 微课视频</h2>
+        </div>
+        <div class="detail-content">
+          <video controls width="100%" height="auto">
+            <source src="C:\Users\wlx2004\Desktop\知华斋网站\二十四节气讲解.mp4">
+            您的浏览器不支持视频播放。
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 盖章音效 -->
+  <audio id="sealSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-stamp-1120.mp3" type="audio/mpeg">
+  </audio>
+  
+  <!-- JavaScript -->
+  <script>
+    // 移动端菜单切换
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    menuBtn.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('h-0')) {
+        mobileMenu.classList.remove('h-0');
+        mobileMenu.classList.add('h-48');
+        menuBtn.innerHTML = '<i class="fa fa-times text-2xl"></i>';
+      } else {
+        mobileMenu.classList.add('h-0');
+        mobileMenu.classList.remove('h-48');
+        menuBtn.innerHTML = '<i class="fa fa-bars text-2xl"></i>';
+      }
+    });
+    
+    // 宫门动画
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('leftDoor').style.transform = 'translateX(-100%)';
+        document.getElementById('rightDoor').style.transform = 'translateX(100%)';
+      }, 500);
+    });
+    
+    // 盖章音效
+    const sealButtons = document.querySelectorAll('.seal-btn');
+    const sealSound = document.getElementById('sealSound');
+    
+    sealButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // 播放音效
+        sealSound.currentTime = 0;
+        sealSound.play().catch(e => console.log('Audio play failed:', e));
+        
+        // 添加点击效果
+        button.classList.add('scale-90');
+        setTimeout(() => {
+          button.classList.remove('scale-90');
+        }, 200);
+      });
+    });
+    
+    // 打开外部链接
+    function openExternal(url) {
+      window.open(url, '_blank');
+    }
+    
+    // 打开本地视频
+    function openLocalVideo() {
+      // 显示视频模态框
+      document.getElementById('videoModal').style.display = "block";
+      document.body.style.overflow = "hidden"; // 防止背景滚动
+      
+      // 获取视频元素并播放
+      const video = document.querySelector('#videoModal video');
+      video.currentTime = 0;
+      video.play().catch(e => console.log('Video play failed:', e));
+    }
+    
+    // 打开模态框
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+      document.body.style.overflow = "hidden"; // 防止背景滚动
+    }
+    
+    // 关闭模态框
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+      document.body.style.overflow = "auto"; // 恢复背景滚动
+      
+      // 如果是视频模态框，暂停视频
+      if (modalId === 'videoModal') {
+        const video = document.querySelector('#videoModal video');
+        video.pause();
+      }
+    }
+    
+    // 点击模态框外部关闭
+    window.onclick = function(event) {
+      let modals = document.querySelectorAll('.modal');
+      modals.forEach(modal => {
+        if (event.target === modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+          
+          // 如果是视频模态框，暂停视频
+          if (modal.id === 'videoModal') {
+            const video = modal.querySelector('video');
+            video.pause();
+          }
+        }
+      });
+    };
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          // 关闭移动菜单（如果打开）
+          if (!mobileMenu.classList.contains('h-0')) {
+            mobileMenu.classList.add('h-0');
+            mobileMenu.classList.remove('h-48');
+            menuBtn.innerHTML = '<i class="fa fa-bars text-2xl"></i>';
+          }
+          
+          // 滚动到目标位置
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 滚动动画
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+          entry.target.classList.remove('opacity-0', 'translate-y-8');
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('#main-content > div').forEach(section => {
+      section.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700');
+      observer.observe(section);
+    });
+  </script>
+  
+  <!-- 样式调整 -->
+  <style>
+    /* 使模态框默认隐藏 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+    
+    .modal-content {
+      background-color: #F8F5F0;
+      margin: 10% auto;
+      padding: 20px;
+      border: 2px solid #D4AF37;
+      width: 80%;
+      max-width: 800px;
+      position: relative;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .close-btn {
+      color: #9E1F36;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+    }
+    
+    .close-btn:hover,
+    .close-btn:focus {
+      color: #D4AF37;
+      text-decoration: none;
+    }
+    
+    .collection-detail {
+      padding: 20px;
+    }
+    
+    .detail-header {
+      border-bottom: 1px solid #D4AF37;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .detail-header h2 {
+      font-family: 'Ma Shan Zheng', cursive;
+      color: #9E1F36;
+      font-size: 28px;
+    }
+    
+    .detail-content {
+      padding: 10px 0;
+    }
+  </style>
+</body>
+</html>
